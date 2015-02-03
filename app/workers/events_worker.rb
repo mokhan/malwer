@@ -3,12 +3,9 @@ require 'json'
 class EventsWorker
   include Sneakers::Worker
   from_queue "worker.events",
-    durable: true,
-    ack: true,
     threads: 50,
     prefetch: 50,
-    timeout_job_after: 1,
-    exchange: "malwer.events"
+    timeout_job_after: 1
 
   def work(event_json)
     logger.info event_json
