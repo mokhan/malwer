@@ -1,29 +1,34 @@
-<p id="notice"><%= notice %></p>
 
-<h1>Listing Dispositions</h1>
+<div class="row">
+  <div class="small-12 columns">
+    <p id="notice"><%= notice %></p>
 
-<table>
-  <thead>
-    <tr>
-      <th>Fingerprint</th>
-      <th>State</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+    <h1>Listing Dispositions</h1>
+    <ul class="button-group">
+      <li> <%= link_to 'New Disposition', new_disposition_path, class: 'button' %> </li>
+    </ul>
 
-  <tbody>
-    <% @dispositions.each do |disposition| %>
-      <tr>
-        <td><%= disposition.fingerprint %></td>
-        <td><%= disposition.state %></td>
-        <td><%= link_to 'Show', disposition %></td>
-        <td><%= link_to 'Edit', edit_disposition_path(disposition) %></td>
-        <td><%= link_to 'Destroy', disposition, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+    <table>
+      <thead>
+        <tr>
+          <th>Fingerprint</th>
+          <th>State</th>
+          <th colspan="3"></th>
+        </tr>
+      </thead>
 
-<br>
+      <tbody>
+        <% @dispositions.each do |disposition| %>
+          <tr>
+            <td><%= disposition.fingerprint %></td>
+            <td><%= disposition.state %></td>
+            <td><%= link_to 'Show', disposition %></td>
+            <td><%= link_to 'Edit', edit_disposition_path(disposition) %></td>
+            <td><%= link_to 'Destroy', disposition, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
 
-<%= link_to 'New Disposition', new_disposition_path %>
+  </div>
+</div>

@@ -1,9 +1,14 @@
-<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="small-12 columns">
+    <p id="notice"><%= notice %></p>
 
-<p>
-  <strong>Hostname:</strong>
-  <%= @agent.hostname %>
-</p>
+    <p>
+    <strong>Hostname:</strong>
+    <%= @agent.hostname %>
+    </p>
 
-<%= link_to 'Edit', edit_agent_path(@agent) %> |
-<%= link_to 'Back', agents_path %>
+    <%= link_to 'Edit', edit_agent_path(@agent) %> |
+    <%= link_to 'Events', agent_events_path(@agent) %> |
+    <%= link_to 'Back', agents_path %>
+  </div>
+</div>

@@ -1,28 +1,28 @@
-<p id="notice"><%= notice %></p>
+<div class="row">
+  <div class="small-12 columns">
+    <p id="notice"><%= notice %></p>
 
-<h1>Listing Agents</h1>
+    <h1>Listing Agents</h1>
+    <%= link_to 'New Agent', new_agent_path, class: 'button' %>
 
-<table>
-  <thead>
-    <tr>
-      <th>Hostname</th>
-      <th colspan="4"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @agents.each do |agent| %>
-      <tr>
-        <td><%= agent.hostname %></td>
-        <td><%= link_to 'Events', agent_events_path(agent) %></td>
-        <td><%= link_to 'Show', agent %></td>
-        <td><%= link_to 'Edit', edit_agent_path(agent) %></td>
-        <td><%= link_to 'Destroy', agent, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<br>
-
-<%= link_to 'New Agent', new_agent_path %>
+    <table>
+      <thead>
+        <tr>
+          <th>Hostname</th>
+          <th colspan="4"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @agents.each do |agent| %>
+          <tr>
+            <td><%= agent.hostname %></td>
+            <td><%= link_to 'Events', agent_events_path(agent) %></td>
+            <td><%= link_to 'Show', agent %></td>
+            <td><%= link_to 'Edit', edit_agent_path(agent) %></td>
+            <td><%= link_to 'Destroy', agent, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
