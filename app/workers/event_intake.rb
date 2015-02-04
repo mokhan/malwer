@@ -1,6 +1,6 @@
 require 'json'
 
-class EventsWorker
+class EventIntake
   include Sneakers::Worker
   from_queue "worker.events"
 

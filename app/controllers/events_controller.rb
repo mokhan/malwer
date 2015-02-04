@@ -1,4 +1,6 @@
 class EventsController < ApplicationController
+  before_action :load_agent
+
   def index
     @events = Event.all
   end
@@ -8,8 +10,8 @@ class EventsController < ApplicationController
   end
 
   def create
-    Publisher.publish("events", event_params)
-    redirect_to events_path, notice: 'Event was successfully created.'
+    Publisher.publish("events", event_params.merge({agent_id: @agent.id}))
+    redirect_to agent_events_path, notice: 'Event was successfully created.'
   end
 
   def destroy
@@ -18,7 +20,13 @@ class EventsController < ApplicationController
     redirect_to events_url, notice: 'Event was successfully destroyed.'
   end
 
+  private
+
   def event_params
     params.require(:event).permit(:name, :data)
+  end
+
+  def load_agent
+    @agent = Agent.find(params[:agent_id])
   end
 end

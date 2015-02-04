@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
+  resources :agents do
+    resources :events, only: [:index, :new, :create, :destroy]
+  end
+
   resources :dispositions
-  resources :events, only: [:index, :new, :create, :destroy]
   root 'events#index'
 end

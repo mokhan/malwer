@@ -11,11 +11,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150204033540) do
+ActiveRecord::Schema.define(version: 20150204042612) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
   enable_extension "uuid-ossp"
+
+  create_table "agents", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
+    t.string   "hostname"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "dispositions", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "fingerprint"
@@ -29,6 +35,9 @@ ActiveRecord::Schema.define(version: 20150204033540) do
     t.json     "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer  "agent_id"
   end
+
+  add_index "events", ["agent_id"], name: "index_events_on_agent_id", using: :btree
 
 end
