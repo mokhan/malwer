@@ -4,5 +4,5 @@ Rails.application.routes.draw do
   end
 
   resources :dispositions
-  root 'events#index'
+  root 'agents#index'
 end
