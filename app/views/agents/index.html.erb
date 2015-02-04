@@ -9,7 +9,7 @@
       <thead>
         <tr>
           <th>Hostname</th>
-          <th colspan="4"></th>
+          <th colspan="5"></th>
         </tr>
       </thead>
       <tbody>
@@ -17,6 +17,7 @@
           <tr>
             <td><%= agent.hostname %></td>
             <td><%= link_to 'Events', agent_events_path(agent) %></td>
+            <td><%= link_to 'Files', agent_files_path(agent) %></td>
             <td><%= link_to 'Show', agent %></td>
             <td><%= link_to 'Edit', edit_agent_path(agent) %></td>
             <td><%= link_to 'Destroy', agent, method: :delete, data: { confirm: 'Are you sure?' } %></td>
