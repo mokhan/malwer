@@ -2,7 +2,7 @@
   <div class="small-12 columns">
     <p id="notice"><%= notice %></p>
 
-    <h1>Listing Events</h1>
+    <h1>Listing Events for agent <%= @agent.hostname %></h1>
     <%= link_to 'New Event', new_agent_event_path(@agent), class: 'button' %>
 
     <table>
