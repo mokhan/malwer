@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Dispositions</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Fingerprint</th>
+      <th>State</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @dispositions.each do |disposition| %>
+      <tr>
+        <td><%= disposition.fingerprint %></td>
+        <td><%= disposition.state %></td>
+        <td><%= link_to 'Show', disposition %></td>
+        <td><%= link_to 'Edit', edit_disposition_path(disposition) %></td>
+        <td><%= link_to 'Destroy', disposition, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Disposition', new_disposition_path %>

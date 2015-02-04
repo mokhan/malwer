@@ -1,0 +1,14 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Fingerprint:</strong>
+  <%= @disposition.fingerprint %>
+</p>
+
+<p>
+  <strong>State:</strong>
+  <%= @disposition.state %>
+</p>
+
+<%= link_to 'Edit', edit_disposition_path(@disposition) %> |
+<%= link_to 'Back', dispositions_path %>
