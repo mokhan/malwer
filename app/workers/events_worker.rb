@@ -2,10 +2,7 @@ require 'json'
 
 class EventsWorker
   include Sneakers::Worker
-  from_queue "worker.events",
-    threads: 50,
-    prefetch: 50,
-    timeout_job_after: 1
+  from_queue "worker.events"
 
   def work(event_json)
     logger.info event_json

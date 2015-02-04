@@ -6,13 +6,16 @@ namespace :rabbitmq do
     connection.start
     channel = connection.create_channel
 
-    # create exchange
+    # event intake bindings
     exchange = channel.fanout("malwer.events")
-
-    # get or create queue (note the durable setting)
     queue = channel.queue("worker.events", durable: true)
-    # bind queue to exchange
     queue.bind("malwer.events")
+
+    # poke bindings
+    exchange = channel.fanout("malwer.poke")
+    queue = channel.queue("worker.poke", durable: true)
+    queue.bind("malwer.poke")
+
     connection.close
   end
 end

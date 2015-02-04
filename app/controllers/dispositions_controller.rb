@@ -26,30 +26,21 @@ class DispositionsController < ApplicationController
   # POST /dispositions
   # POST /dispositions.json
   def create
-    @disposition = Disposition.new(disposition_params)
+    Publisher.publish("poke", disposition_params)
 
     respond_to do |format|
-      if @disposition.save
-        format.html { redirect_to @disposition, notice: 'Disposition was successfully created.' }
-        format.json { render :show, status: :created, location: @disposition }
-      else
-        format.html { render :new }
-        format.json { render json: @disposition.errors, status: :unprocessable_entity }
-      end
+      format.html { redirect_to dispositions_path, notice: 'Disposition was successfully created.' }
+      format.json { head :no_content }
     end
   end
 
   # PATCH/PUT /dispositions/1
   # PATCH/PUT /dispositions/1.json
   def update
+    Publisher.publish("poke", disposition_params)
     respond_to do |format|
-      if @disposition.update(disposition_params)
-        format.html { redirect_to @disposition, notice: 'Disposition was successfully updated.' }
-        format.json { render :show, status: :ok, location: @disposition }
-      else
-        format.html { render :edit }
-        format.json { render json: @disposition.errors, status: :unprocessable_entity }
-      end
+      format.html { redirect_to dispositions_path, notice: 'Disposition was successfully updated.' }
+      format.json { head :no_content }
     end
   end
 
