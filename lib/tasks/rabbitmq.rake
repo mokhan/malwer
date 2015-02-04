@@ -16,6 +16,11 @@ namespace :rabbitmq do
     queue = channel.queue("worker.poke", durable: true)
     queue.bind("malwer.poke")
 
+    # cloud queries bindings
+    exchange = channel.fanout("malwer.queries")
+    queue = channel.queue("worker.queries", durable: true)
+    queue.bind("malwer.queries")
+
     connection.close
   end
 end
