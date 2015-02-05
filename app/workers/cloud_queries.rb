@@ -12,12 +12,11 @@ class CloudQueries
     disposition = Disposition.find_by(fingerprint: fingerprint)
 
     if disposition.nil?
-      # publish command to fetch file from agent
-      #publish(JSON.generate({
-        #command: :request_analysis,
-        #agent_id: attributes["agent_id"],
-        #fingerprint: fingerprint,
-      #}), to_queue: "worker.commands")
+      publish(JSON.generate({
+        command: :request_analysis,
+        agent_id: attributes["agent_id"],
+        fingerprint: fingerprint,
+      }), routing_key: "malwer.agents.#{attributes["agent_id"]}")
     end
 
     ack!
