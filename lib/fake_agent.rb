@@ -50,7 +50,7 @@ class FakeAgent
           name: event,
           data: {
             fingerprint: fingerprint,
-            full_path: file,
+            path: file,
             hostname: Socket.gethostname,
             ip_addresses: ip_addresses,
           }
