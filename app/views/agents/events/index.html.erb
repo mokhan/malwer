@@ -19,7 +19,11 @@
         <% @events.each do |event| %>
           <tr>
             <td><%= event.name %></td>
-            <td><%= event.data %></td>
+            <td>
+              <% event.data.each do |key, value| %>
+                <%= key %>: <%= value %>
+              <% end %>
+            </td>
             <td><%= event.created_at %></td>
             <td><%= link_to 'Destroy', [@agent, event], method: :delete, data: { confirm: 'Are you sure?' } %></td>
           </tr>
