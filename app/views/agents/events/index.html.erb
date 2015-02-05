@@ -31,4 +31,14 @@
       </tbody>
     </table>
   </div>
+
+  <div class="small-12 columns">
+    <h2>Events per minute</h2>
+    <%= line_chart @agent.events.group_by_minute(:created_at).count %>
+  </div>
+
+  <div class="small-12 columns">
+    <h2>Events by category</h2>
+    <%= pie_chart @agent.events.group(:name).count %>
+  </div>
 </div>

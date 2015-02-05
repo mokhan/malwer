@@ -37,6 +37,8 @@ gem 'bunny'
 gem 'sneakers'
 gem 'foreman'
 gem 'foundation-rails'
+gem 'chartkick'
+gem 'groupdate'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
