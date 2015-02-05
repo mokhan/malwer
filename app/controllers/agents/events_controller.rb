@@ -12,13 +12,13 @@ module Agents
 
     def create
       Publisher.publish("events", event_params.merge({agent_id: @agent.id}))
-      redirect_to agent_events_path, notice: 'Event was successfully created.'
+      redirect_to agent_events_url, notice: 'Event was successfully created.'
     end
 
     def destroy
       @event = Event.find(params[:id])
       @event.destroy
-      redirect_to events_url, notice: 'Event was successfully destroyed.'
+      redirect_to agent_events_url(@agent), notice: 'Event was successfully destroyed.'
     end
 
     private
