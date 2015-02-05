@@ -8,12 +8,6 @@ class CloudQueries
     logger.info "Query for: #{json.inspect}"
     attributes = JSON.parse(json)
 
-    publish(JSON.generate({
-      agent_id: attributes["agent_id"],
-      name: "File #{attributes["name"]}",
-      data: attributes["data"]
-    }), to_queue: "worker.events")
-
     fingerprint = attributes["fingerprint"]
     disposition = Disposition.find_by(fingerprint: fingerprint)
 

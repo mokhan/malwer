@@ -6,7 +6,7 @@ class FakeAgent
     @endpoint = endpoint
   end
 
-  def run(directory)
+  def watch(directory)
     listener = Listen.to(directory, debug: true) do |modified, added, removed|
       publish_event(:modified, modified)
       publish_event(:added, added)
@@ -15,6 +15,22 @@ class FakeAgent
 
     listener.start
     sleep
+  end
+
+  def scan(directory)
+    Dir["**/**/*"].each do |file|
+      next unless File.file?(file)
+      url = "#{endpoint}/agents/#{id}/files/#{fingerprint_for(file)}"
+      response = Typhoeus.get(url)
+      body = JSON.parse(response.body)
+      puts body.inspect
+      case body["state"]
+      when "malicious"
+        publish_event(:quarantined, [file])
+      when "unknown"
+        puts "file is unknown"
+      end
+    end
   end
 
   private
