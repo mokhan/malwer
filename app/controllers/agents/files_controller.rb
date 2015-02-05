@@ -12,7 +12,7 @@ module Agents
       @file = Disposition.find_by(fingerprint: params[:id])
       Publisher.publish("queries", {
         fingerprint: params[:id],
-        data: params
+        payload: params[:payload]
       })
     end
 
