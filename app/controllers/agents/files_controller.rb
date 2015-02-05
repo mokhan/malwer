@@ -11,8 +11,9 @@ module Agents
     def show
       @file = Disposition.find_by(fingerprint: params[:id])
       Publisher.publish("queries", {
-        fingerprint: params[:id],
-        payload: params[:payload]
+        agent_id: params[:id],
+        name: params[:name],
+        data: params[:data]
       })
     end
 

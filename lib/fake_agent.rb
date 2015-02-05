@@ -25,9 +25,11 @@ class FakeAgent
       url = "#{endpoint}/agents/#{id}/files/#{fingerprint}"
       puts url
       Typhoeus.get(url, body: {
-        payload: {
-          event: event,
-          full_path: file
+        agent_id: id,
+        name: event,
+        data: {
+          fingerprint: fingerprint,
+          full_path: file,
         }
       })
     end
