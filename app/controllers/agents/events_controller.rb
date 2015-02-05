@@ -24,7 +24,7 @@ module Agents
     private
 
     def event_params
-      params.require(:event).permit(:name, :data)
+      params[:event]
     end
 
     def load_agent

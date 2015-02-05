@@ -22,20 +22,26 @@ class FakeAgent
   def publish_event(event, files)
     files.each do |file|
       fingerprint = fingerprint_for(file)
-      url = "#{endpoint}/agents/#{id}/files/#{fingerprint}"
-      puts url
-      Typhoeus.get(url, body: {
-        agent_id: id,
-        name: event,
-        data: {
-          fingerprint: fingerprint,
-          full_path: file,
+      url = "#{endpoint}/agents/#{id}/events/"
+      body = {
+        event: {
+          agent_id: id,
+          name: event,
+          data: {
+            fingerprint: fingerprint,
+            full_path: file,
+          }
         }
-      })
+      }
+      puts [url, body].inspect
+      Typhoeus.post(url, body: body)
     end
+  rescue => e
+    puts "#{e.message} #{e.backtrace.join(' ')}"
   end
 
   def fingerprint_for(file)
+    return nil unless File.exist?(file)
     result = `shasum -a 256 #{file}`
     sha, * = result.split(' ')
     sha
