@@ -21,7 +21,10 @@ class FakeAgent
     Dir["**/**/*"].each do |file|
       next unless File.file?(file)
       url = "#{endpoint}/agents/#{id}/files/#{fingerprint_for(file)}"
-      response = Typhoeus.get(url)
+      body = {
+        path: File.expand_path(file)
+      }
+      response = Typhoeus.get(url, body: body)
       body = JSON.parse(response.body)
       puts body.inspect
       case body["state"]
