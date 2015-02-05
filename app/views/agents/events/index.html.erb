@@ -10,8 +10,7 @@
         <tr>
           <th>Name</th>
           <th>Data</th>
-          <th>Created At</th>
-          <th></th>
+          <th width="210">Created At</th>
         </tr>
       </thead>
 
@@ -20,12 +19,13 @@
           <tr>
             <td><%= event.name %></td>
             <td>
+              <ul>
               <% event.data.each do |key, value| %>
-                <%= key %>: <%= value %>
+                <li><%= key %>: <%= value %></li>
               <% end %>
+              </ul>
             </td>
             <td><%= event.created_at %></td>
-            <td><%= link_to 'Destroy', [@agent, event], method: :delete, data: { confirm: 'Are you sure?' } %></td>
           </tr>
         <% end %>
       </tbody>
