@@ -1,3 +1,5 @@
+require 'socket'
+
 class FakeAgent
   attr_reader :id, :endpoint
 
@@ -49,6 +51,8 @@ class FakeAgent
           data: {
             fingerprint: fingerprint,
             full_path: file,
+            hostname: Socket.gethostname,
+            ip_addresses: ip_addresses,
           }
         }
       }
@@ -64,5 +68,9 @@ class FakeAgent
     result = `shasum -a 256 #{file}`
     sha, * = result.split(' ')
     sha
+  end
+
+  def ip_addresses
+    Socket.ip_address_list.find_all { |x| x.ipv4? }.map { |x| x.ip_address }
   end
 end
