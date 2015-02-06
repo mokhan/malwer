@@ -13,6 +13,9 @@ class FakeAgent
       publish_event(:modified, modified)
       publish_event(:added, added)
       publish_event(:removed, removed)
+      (modified + added + removed).flatten.each do |file|
+        scan_file(file)
+      end
     end
 
     listener.start
@@ -21,23 +24,18 @@ class FakeAgent
 
   def scan(directory)
     Dir["Rakefile"].each do |file|
-      next unless File.file?(file)
-      url = "#{endpoint}/agents/#{id}/files/#{fingerprint_for(file)}"
-      body = {
-        name: 'lookup',
-        data: {
-          path: File.expand_path(file)
-        }
-      }
-      response = Typhoeus.get(url, body: body)
-      body = JSON.parse(response.body)
-      puts body.inspect
-      case body["state"]
-      when "malicious"
-        publish_event(:quarantined, [file])
-      when "unknown"
-        puts "file is unknown"
-      end
+      scan_file(file)
+    end
+  end
+
+  def scan_file(file)
+    return unless File.file?(file)
+
+    case disposition_for(file)
+    when "malicious"
+      publish_event(:quarantined, [file])
+    when "unknown"
+      puts "file is unknown"
     end
   end
 
@@ -104,5 +102,18 @@ class FakeAgent
 
   def ip_addresses
     Socket.ip_address_list.find_all { |x| x.ipv4? }.map { |x| x.ip_address }
+  end
+
+  def disposition_for(file)
+    fingerprint = fingerprint_for(file)
+    url = "#{endpoint}/agents/#{id}/files/#{fingerprint_for(file)}"
+    body = {
+      name: 'lookup',
+      data: {
+        fingerprint: fingerprint,
+        path: File.expand_path(file)
+      }
+    }
+    JSON.parse(Typhoeus.get(url, body: body).body)["state"]
   end
 end
