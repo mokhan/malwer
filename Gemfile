@@ -39,6 +39,8 @@ gem 'foreman'
 gem 'foundation-rails'
 gem 'chartkick'
 gem 'groupdate'
+gem 'pcaprub'
+gem 'packetfu'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

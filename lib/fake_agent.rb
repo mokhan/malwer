@@ -41,6 +41,35 @@ class FakeAgent
     end
   end
 
+  def nfm_scan(interface)
+    capture = PCAPRUB::Pcap.open_live(interface, 65535, true, 0)
+    #capture.setfilter('icmp')
+    #capture.setfilter('tcp and dst port 80')
+    capture.setfilter('port 80')
+    puts 'running...'
+    capture.each_packet do |packet|
+      puts "++++"
+      puts Time.at(packet.time)
+      puts "micro => #{packet.microsec}"
+      puts packet.inspect
+      #puts packet.data
+    end
+    capture.close
+  end
+  include PacketFu
+
+  def sniff(interface)
+    capture = Capture.new(iface: interface, start: true)
+    capture.stream.each do |p|
+      packet = Packet.parse(p)
+      if packet.is_ip?
+        next if packet.ip_saddr == Utils.ifconfig(interface)[:ip_saddr]
+        packet_info = [packet.ip_saddr, packet.ip_daddr, packet.size, packet.proto.last]
+        puts "%-15s -> %-15s %-4d %s" % packet_info
+      end
+    end
+  end
+
   private
 
   def publish_event(event, files)
