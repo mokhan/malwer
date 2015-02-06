@@ -1,6 +1,7 @@
 require 'socket'
 
 class FakeAgent
+  include PacketFu
   attr_reader :id, :endpoint
 
   def initialize(id, endpoint)
@@ -39,23 +40,6 @@ class FakeAgent
     end
   end
 
-  def nfm_scan(interface)
-    capture = PCAPRUB::Pcap.open_live(interface, 65535, true, 0)
-    #capture.setfilter('icmp')
-    #capture.setfilter('tcp and dst port 80')
-    capture.setfilter('port 80')
-    puts 'running...'
-    capture.each_packet do |packet|
-      puts "++++"
-      puts Time.at(packet.time)
-      puts "micro => #{packet.microsec}"
-      puts packet.inspect
-      #puts packet.data
-    end
-    capture.close
-  end
-  include PacketFu
-
   def sniff(interface)
     capture = Capture.new(iface: interface, start: true)
     capture.stream.each do |p|
@@ -72,22 +56,19 @@ class FakeAgent
 
   def publish_event(event, files)
     files.each do |file|
-      fingerprint = fingerprint_for(file)
-      url = "#{endpoint}/agents/#{id}/events/"
       body = {
         event: {
           agent_id: id,
           name: event,
           data: {
-            fingerprint: fingerprint,
+            fingerprint: fingerprint_for(file),
             path: file,
             hostname: Socket.gethostname,
             ip_addresses: ip_addresses,
           }
         }
       }
-      puts [url, body].inspect
-      Typhoeus.post(url, body: body)
+      Typhoeus.post(event_url, body: body)
     end
   rescue => e
     puts "#{e.message} #{e.backtrace.join(' ')}"
@@ -106,7 +87,6 @@ class FakeAgent
 
   def disposition_for(file)
     fingerprint = fingerprint_for(file)
-    url = "#{endpoint}/agents/#{id}/files/#{fingerprint_for(file)}"
     body = {
       name: 'lookup',
       data: {
@@ -114,6 +94,14 @@ class FakeAgent
         path: File.expand_path(file)
       }
     }
-    JSON.parse(Typhoeus.get(url, body: body).body)["state"]
+    JSON.parse(Typhoeus.get(file_query_url(fingerprint), body: body).body)["state"]
+  end
+
+  def file_query_url(fingerprint)
+    "#{endpoint}/agents/#{id}/files/#{fingerprint}"
+  end
+
+  def event_url
+    "#{endpoint}/agents/#{id}/events/"
   end
 end
