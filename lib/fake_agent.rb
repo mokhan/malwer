@@ -63,8 +63,11 @@ class FakeAgent
     capture.stream.each do |p|
       packet = Packet.parse(p)
       if packet.is_ip?
-        next if packet.ip_saddr == Utils.ifconfig(interface)[:ip_saddr]
+        #next if packet.ip_saddr == Utils.ifconfig(interface)[:ip_saddr]
+        next unless packet.ip_saddr == Utils.ifconfig(interface)[:ip_saddr]
+        next unless packet.try(:tcp_dport).present? && packet.tcp_dport == 80
         packet_info = [packet.ip_saddr, packet.ip_daddr, packet.size, packet.proto.last]
+        #puts packet.dissect
         puts "%-15s -> %-15s %-4d %s" % packet_info
       end
     end
