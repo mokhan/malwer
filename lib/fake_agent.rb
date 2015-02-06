@@ -24,7 +24,7 @@ class FakeAgent
   end
 
   def scan(directory)
-    Dir["Rakefile"].each do |file|
+    Dir["**/**/*"].each do |file|
       scan_file(file)
     end
   end
