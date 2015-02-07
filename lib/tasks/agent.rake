@@ -15,8 +15,10 @@ namespace :agent do
   end
 
   desc "scan network traffic"
-  task nfm: :environment do
-    agent = FakeAgent.new(Agent.first.id, ENDPOINT)
-    agent.sniff('en1')
+  task :nfm do
+    id = Agent.first.id
+    agent = FakeAgent.new(id, ENDPOINT)
+
+    agent.packet_capture('eth0')
   end
 end
