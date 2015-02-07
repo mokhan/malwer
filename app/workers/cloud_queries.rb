@@ -18,11 +18,12 @@ class CloudQueries
     }), to_queue: "worker.events")
 
     if disposition.nil?
-      publish(JSON.generate({
-        command: :request_analysis,
-        agent_id: attributes["agent_id"],
-        fingerprint: fingerprint,
-      }), routing_key: "malwer.agents.#{attributes["agent_id"]}")
+      #publish(JSON.generate({
+        #command: :request_analysis,
+        #agent_id: attributes["agent_id"],
+        #fingerprint: fingerprint,
+      #}), routing_key: "malwer.commands")
+      FingerprintLookup.perform_later(fingerprint)
     end
 
     ack!
