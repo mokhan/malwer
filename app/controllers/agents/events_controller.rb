@@ -3,7 +3,7 @@ module Agents
     before_action :load_agent
 
     def index
-      @events = @agent.events.order(created_at: :desc)
+      @events = @agent.events.order(created_at: :desc).limit(10)
     end
 
     def new
