@@ -11,21 +11,8 @@ class CloudQueries
     fingerprint = attributes["data"]["fingerprint"]
     disposition = Disposition.find_by(fingerprint: fingerprint)
 
-    publish(JSON.generate({
-      name: :scanned,
-      agent_id: attributes["agent_id"],
-      data: attributes["data"]
-    }), to_queue: "worker.events")
-
-    if disposition.nil?
-      #publish(JSON.generate({
-      #command: :request_analysis,
-      #agent_id: attributes["agent_id"],
-      #fingerprint: fingerprint,
-      #}), routing_key: "malwer.commands")
-      Disposition.create!(fingerprint: fingerprint, state: :unknown)
-      FingerprintLookupJob.perform_later(fingerprint)
-    end
+    Disposition.create!(fingerprint: fingerprint, state: :unknown) if disposition.nil?
+    FingerprintLookupJob.perform_later(fingerprint) if disposition.state == :unknown
 
     ack!
   end

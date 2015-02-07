@@ -6,20 +6,26 @@ namespace :rabbitmq do
     connection.start
     channel = connection.create_channel
 
-    # event intake bindings
-    exchange = channel.fanout("malwer.events")
-    queue = channel.queue("worker.events", durable: true)
-    queue.bind("malwer.events")
+    # single malwer topic exchange
+    # routing keys:
+    # * commands.command_type.(agent_id/fingerprint)
+      # * commands can be issued for specific agents
+      # * commands can be issued globally. (e.g. poke a dispostion)
+    # * events.event_type.agent_id
 
-    # poke bindings
-    exchange = channel.fanout("malwer.poke")
-    queue = channel.queue("worker.poke", durable: true)
-    queue.bind("malwer.poke")
+    channel.topic("malwer").tap do |exchange|
+      # event intake bindings
+      queue = channel.queue("worker.events", durable: true)
+      queue.bind(exchange, routing_key: "events.#")
 
-    # cloud queries bindings
-    exchange = channel.fanout("malwer.queries")
-    queue = channel.queue("worker.queries", durable: true)
-    queue.bind("malwer.queries")
+      # poke bindings
+      queue = channel.queue("worker.poke", durable: true)
+      queue.bind(exchange, routing_key: "commands.poke.#")
+
+      # cloud queries bindings
+      queue = channel.queue("worker.queries", durable: true)
+      queue.bind(exchange, routing_key: 'events.scanned.#')
+    end
 
     connection.close
   end

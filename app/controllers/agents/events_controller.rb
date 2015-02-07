@@ -11,7 +11,9 @@ module Agents
     end
 
     def create
-      Publisher.publish("events", event_params.merge({agent_id: @agent.id}))
+      message = event_params.merge({agent_id: @agent.id})
+      routing_key = "events.#{event_params[:name]}.#{@agent.id}"
+      Publisher.publish(routing_key, message)
       redirect_to agent_events_url, notice: 'Event was successfully created.'
     end
 

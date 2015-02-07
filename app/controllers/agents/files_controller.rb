@@ -16,12 +16,19 @@ module Agents
         name: params[:name],
         data: params[:data]
       })
+
+      message = {
+        agent_id: params[:id],
+        name: params[:name],
+        data: params[:data]
+      }
+      Publisher.publish("events.scanned.#{@agent.id}", message)
     end
 
     private
 
     def load_agent
-      Agent.find(params[:agent_id])
+      @agent = Agent.find(params[:agent_id])
     end
   end
 end

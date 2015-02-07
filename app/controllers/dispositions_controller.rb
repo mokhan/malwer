@@ -26,7 +26,8 @@ class DispositionsController < ApplicationController
   # POST /dispositions
   # POST /dispositions.json
   def create
-    Publisher.publish("poke", disposition_params)
+    fingerprint = disposition_params[:fingerprint]
+    Publisher.publish("commands.poke.#{fingerprint}", disposition_params)
 
     respond_to do |format|
       format.html { redirect_to dispositions_path, notice: 'Disposition was successfully created.' }
