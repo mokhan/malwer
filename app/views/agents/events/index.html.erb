@@ -4,6 +4,7 @@
 
     <h1>Listing Events for agent <%= @agent.hostname %></h1>
     <%= link_to 'New Event', new_agent_event_path(@agent), class: 'button' %>
+    <%= link_to "refresh", params, id: 'refresh_page_link', style: 'display:none;' %>
 
     <table>
       <thead>
@@ -13,7 +14,6 @@
           <th width="210">Created At</th>
         </tr>
       </thead>
-
       <tbody>
         <% @events.each do |event| %>
           <tr>
@@ -42,3 +42,9 @@
     <%= pie_chart @agent.events.group(:name).count %>
   </div>
 </div>
+
+<script type="text/javascript" charset="utf-8">
+$(function(){
+  new window.EventsFeed().start(1000, '#refresh_page_link');
+});
+</script>

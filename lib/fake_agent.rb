@@ -1,6 +1,7 @@
 require 'socket'
 
 class FakeAgent
+  include PacketFu
   attr_reader :id, :endpoint
 
   def initialize(id, endpoint)
@@ -13,6 +14,9 @@ class FakeAgent
       publish_event(:modified, modified)
       publish_event(:added, added)
       publish_event(:removed, removed)
+      (modified + added + removed).flatten.each do |file|
+        scan_file(file)
+      end
     end
 
     listener.start
@@ -20,52 +24,36 @@ class FakeAgent
   end
 
   def scan(directory)
-    Dir["Rakefile"].each do |file|
-      next unless File.file?(file)
-      url = "#{endpoint}/agents/#{id}/files/#{fingerprint_for(file)}"
-      body = {
-        name: 'lookup',
-        data: {
-          path: File.expand_path(file)
-        }
-      }
-      response = Typhoeus.get(url, body: body)
-      body = JSON.parse(response.body)
-      puts body.inspect
-      case body["state"]
-      when "malicious"
-        publish_event(:quarantined, [file])
-      when "unknown"
-        puts "file is unknown"
-      end
+    Dir["**/**/*"].each do |file|
+      scan_file(file)
     end
   end
 
-  def nfm_scan(interface)
-    capture = PCAPRUB::Pcap.open_live(interface, 65535, true, 0)
-    #capture.setfilter('icmp')
-    #capture.setfilter('tcp and dst port 80')
-    capture.setfilter('port 80')
-    puts 'running...'
-    capture.each_packet do |packet|
-      puts "++++"
-      puts Time.at(packet.time)
-      puts "micro => #{packet.microsec}"
-      puts packet.inspect
-      #puts packet.data
+  def scan_file(file)
+    return unless File.file?(file)
+
+    case disposition_for(file)
+    when "malicious"
+      publish_event(:quarantined, [file])
+    when "unknown"
+      puts "file is unknown"
     end
-    capture.close
   end
-  include PacketFu
 
   def sniff(interface)
     capture = Capture.new(iface: interface, start: true)
     capture.stream.each do |p|
       packet = Packet.parse(p)
       if packet.is_ip?
-        #next if packet.ip_saddr == Utils.ifconfig(interface)[:ip_saddr]
-        next unless packet.ip_saddr == Utils.ifconfig(interface)[:ip_saddr]
-        next unless packet.try(:tcp_dport).present? && packet.tcp_dport == 80
+        yield packet if block_given?
+      end
+    end
+  end
+
+  def packet_capture(interface)
+    sniff(interface) do |packet|
+      if packet.ip_saddr == Utils.ifconfig(interface)[:ip_saddr]
+      else
         packet_info = [packet.ip_saddr, packet.ip_daddr, packet.size, packet.proto.last]
         #puts packet.dissect
         puts "%-15s -> %-15s %-4d %s" % packet_info
@@ -77,22 +65,19 @@ class FakeAgent
 
   def publish_event(event, files)
     files.each do |file|
-      fingerprint = fingerprint_for(file)
-      url = "#{endpoint}/agents/#{id}/events/"
       body = {
         event: {
           agent_id: id,
           name: event,
           data: {
-            fingerprint: fingerprint,
+            fingerprint: fingerprint_for(file),
             path: file,
             hostname: Socket.gethostname,
             ip_addresses: ip_addresses,
           }
         }
       }
-      puts [url, body].inspect
-      Typhoeus.post(url, body: body)
+      Typhoeus.post(event_url, body: body)
     end
   rescue => e
     puts "#{e.message} #{e.backtrace.join(' ')}"
@@ -107,5 +92,25 @@ class FakeAgent
 
   def ip_addresses
     Socket.ip_address_list.find_all { |x| x.ipv4? }.map { |x| x.ip_address }
+  end
+
+  def disposition_for(file)
+    fingerprint = fingerprint_for(file)
+    body = {
+      name: 'lookup',
+      data: {
+        fingerprint: fingerprint,
+        path: File.expand_path(file)
+      }
+    }
+    JSON.parse(Typhoeus.get(file_query_url(fingerprint), body: body).body)["state"]
+  end
+
+  def file_query_url(fingerprint)
+    "#{endpoint}/agents/#{id}/files/#{fingerprint}"
+  end
+
+  def event_url
+    "#{endpoint}/agents/#{id}/events/"
   end
 end
