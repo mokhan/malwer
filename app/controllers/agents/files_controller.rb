@@ -11,15 +11,9 @@ module Agents
     def show
       @fingerprint = params[:id]
       @file = Disposition.find_by(fingerprint: params[:id])
-      Publisher.publish("queries", {
-        agent_id: params[:id],
-        name: params[:name],
-        data: params[:data]
-      })
-
       message = {
         agent_id: params[:id],
-        name: params[:name],
+        type: 'lookup',
         data: params[:data]
       }
       Publisher.publish("events.scanned.#{@agent.id}", message)

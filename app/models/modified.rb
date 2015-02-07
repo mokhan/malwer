@@ -1,0 +1,2 @@
+class Modified < Event
+end

@@ -1,0 +1,2 @@
+class Detection < Event
+end

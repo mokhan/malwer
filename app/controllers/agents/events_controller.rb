@@ -12,7 +12,7 @@ module Agents
 
     def create
       message = event_params.merge({agent_id: @agent.id})
-      routing_key = "events.#{event_params[:name]}.#{@agent.id}"
+      routing_key = "events.#{event_params[:type]}.#{@agent.id}"
       Publisher.publish(routing_key, message)
       redirect_to agent_events_url, notice: 'Event was successfully created.'
     end

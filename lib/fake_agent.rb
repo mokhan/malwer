@@ -68,7 +68,7 @@ class FakeAgent
       body = {
         event: {
           agent_id: id,
-          name: event,
+          type: event,
           data: {
             fingerprint: fingerprint_for(file),
             path: file,
@@ -97,7 +97,6 @@ class FakeAgent
   def disposition_for(file)
     fingerprint = fingerprint_for(file)
     body = {
-      name: 'lookup',
       data: {
         fingerprint: fingerprint,
         path: File.expand_path(file)
