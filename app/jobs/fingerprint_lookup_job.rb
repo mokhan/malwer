@@ -9,11 +9,8 @@ class FingerprintLookupJob < ActiveJob::Base
       apiKey: ENV.fetch("VIRUS_TOTAL_API_KEY"),
     })
     report = JSON.parse(response.response_body)
-    puts "+++"
-    puts response.response_body.inspect
-    puts "---"
     puts report.inspect
-    puts "+++"
-    Disposition.create_for(fingerprint, report)
+    disposition = Disposition.find_by(fingerprint: fingerprint)
+    disposition.file_reports.create!(data: report)
   end
 end

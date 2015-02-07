@@ -9,11 +9,4 @@ class Disposition < ActiveRecord::Base
   def to_param
     fingerprint
   end
-
-  def self.create_for(fingerprint, report)
-    disposition = Disposition.find_by(fingerprint: fingerprint)
-    disposition = Disposition.new(fingerprint: fingerprint) if disposition.nil?
-    disposition.state = :unknown
-    disposition.file_reports.create!(data: report)
-  end
 end

@@ -8,7 +8,7 @@ class CloudQueries
     logger.info "Query for: #{json.inspect}"
     attributes = JSON.parse(json)
 
-    fingerprint = attributes["fingerprint"]
+    fingerprint = attributes["data"]["fingerprint"]
     disposition = Disposition.find_by(fingerprint: fingerprint)
 
     publish(JSON.generate({
@@ -19,11 +19,12 @@ class CloudQueries
 
     if disposition.nil?
       #publish(JSON.generate({
-        #command: :request_analysis,
-        #agent_id: attributes["agent_id"],
-        #fingerprint: fingerprint,
+      #command: :request_analysis,
+      #agent_id: attributes["agent_id"],
+      #fingerprint: fingerprint,
       #}), routing_key: "malwer.commands")
-      FingerprintLookup.perform_later(fingerprint)
+      Disposition.create!(fingerprint: fingerprint, state: :unknown)
+      FingerprintLookupJob.perform_later(fingerprint)
     end
 
     ack!
