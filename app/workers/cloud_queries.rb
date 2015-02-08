@@ -11,7 +11,7 @@ class CloudQueries
     fingerprint = attributes["data"]["fingerprint"]
     disposition = Disposition.find_by(fingerprint: fingerprint)
 
-    Disposition.create!(fingerprint: fingerprint, state: :unknown) if disposition.nil?
+    disposition = Disposition.create!(fingerprint: fingerprint, state: :unknown) if disposition.nil?
     FingerprintLookupJob.perform_later(fingerprint) if disposition.state == :unknown
 
     ack!

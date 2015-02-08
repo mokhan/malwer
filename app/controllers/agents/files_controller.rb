@@ -13,7 +13,7 @@ module Agents
       @file = Disposition.find_by(fingerprint: params[:id])
       message = {
         agent_id: params[:id],
-        type: 'lookup',
+        type: :lookup,
         data: params[:data]
       }
       Publisher.publish("events.scanned.#{@agent.id}", message)

@@ -6,7 +6,9 @@ class EventIntake
 
   def work(event_json)
     logger.info event_json
-    event = Event.create!(JSON.parse(event_json))
+    json = JSON.parse(event_json)
+    json['type'] = json['type'].capitalize
+    event = Event.create!(json)
     logger.info("Create Event: #{event.id}")
     ack!
   end
