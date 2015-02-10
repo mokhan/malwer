@@ -10,7 +10,7 @@ class FakeAgent
   end
 
   def register
-    response = Typhoeus.post(registration_url, body: { agent: { hostname: Socket.gethostname } })
+    response = Typhoeus.post(registration_url, body: { agent: { hostname: hostname } })
     json = JSON.parse(response.body)
     @id = json["id"]
   end
@@ -80,7 +80,7 @@ class FakeAgent
           data: {
             fingerprint: fingerprint_for(file),
             path: file,
-            hostname: Socket.gethostname,
+            hostname: hostname,
             ip_addresses: ip_addresses,
           }
         }
@@ -98,8 +98,12 @@ class FakeAgent
     sha
   end
 
+  def hostname
+    @hostname ||= Socket.gethostname
+  end
+
   def ip_addresses
-    Socket.ip_address_list.find_all { |x| x.ipv4? }.map { |x| x.ip_address }
+    @ipaddresses ||= Socket.ip_address_list.find_all { |x| x.ipv4? }.map { |x| x.ip_address }
   end
 
   def disposition_for(file)

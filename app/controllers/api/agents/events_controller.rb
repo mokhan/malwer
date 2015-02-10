@@ -1,6 +1,6 @@
 module Api
   module Agents
-    class EventsController < ApplicationController
+    class EventsController < ApiController
       def create
         @agent = Agent.find(params[:agent_id])
         publish(EventMessage.new(
