@@ -5,7 +5,7 @@ module Api
         @agent = Agent.find(params[:agent_id])
         publish(EventMessage.new(
           agent_id: @agent.id,
-          event_type: event_params[:event_type],
+          event_type: event_params[:type],
           data: event_params[:data]
         ))
 

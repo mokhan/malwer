@@ -13,7 +13,7 @@ module Agents
     def create
       publish(EventMessage.new(
         agent_id: @agent.id,
-        event_type: event_params[:event_type],
+        event_type: event_params[:type],
         data: event_params[:data]
       ))
       redirect_to agent_events_url, notice: 'Event was successfully created.'
