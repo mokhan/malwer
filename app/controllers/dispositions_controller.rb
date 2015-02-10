@@ -2,7 +2,7 @@ class DispositionsController < ApplicationController
   before_action :set_disposition, only: [:show, :edit, :update, :destroy]
 
   def index
-    @dispositions = Disposition.all
+    @dispositions = Disposition.all.order(:fingerprint)
   end
 
   def show
