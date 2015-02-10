@@ -10,7 +10,7 @@ module Api
         @fingerprint = params[:id]
         @file = Disposition.find_by(fingerprint: params[:id])
         message = {
-          agent_id: params[:id],
+          agent_id: @agent.id,
           type: :lookup,
           data: params[:data]
         }
