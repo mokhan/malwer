@@ -1,6 +1,6 @@
 module Api
   module Agents
-    class FilesController < ApplicationController
+    class FilesController < ApiController
       before_action do
         request.format = :json
       end

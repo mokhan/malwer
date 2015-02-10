@@ -44,6 +44,8 @@ class FakeAgent
     when "unknown"
       puts "file is unknown"
     end
+  rescue StandardError => error
+    log_error(error)
   end
 
   def sniff(interface)
@@ -85,8 +87,8 @@ class FakeAgent
       }
       Typhoeus.post(event_url, body: body)
     end
-  rescue => e
-    puts "#{e.message} #{e.backtrace.join(' ')}"
+  rescue StandardError => error
+    log_error(error)
   end
 
   def fingerprint_for(file)
@@ -121,5 +123,9 @@ class FakeAgent
 
   def registration_url
     "#{endpoint}/api/agents"
+  end
+
+  def log_error(error)
+    puts "#{error.message} #{error.backtrace.join(' ')}"
   end
 end

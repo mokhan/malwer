@@ -1,9 +1,5 @@
 module Api
-  class AgentsController < ApplicationController
-    #before_action do
-      #request.format = :json
-    #end
-
+  class AgentsController < ApiController
     def create
       @agent = Agent.create!(agent_params)
     end

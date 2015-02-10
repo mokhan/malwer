@@ -14,7 +14,7 @@ class EventMessage
   def to_hash
     {
       agent_id: agent_id,
-      event_type: event_type,
+      type: event_type,
       data: data
     }
   end
