@@ -10,8 +10,7 @@ class FakeAgent
   end
 
   def register
-    url = "#{endpoint}/agents.json"
-    response = Typhoeus.post(url, body: { agent: { hostname: Socket.gethostname } })
+    response = Typhoeus.post(registration_url, body: { agent: { hostname: Socket.gethostname } })
     json = JSON.parse(response.body)
     @id = json["id"]
   end
@@ -113,10 +112,14 @@ class FakeAgent
   end
 
   def file_query_url(fingerprint)
-    "#{endpoint}/agents/#{id}/files/#{fingerprint}"
+    "#{endpoint}/api/agents/#{id}/files/#{fingerprint}"
   end
 
   def event_url
-    "#{endpoint}/agents/#{id}/events/"
+    "#{endpoint}/api/agents/#{id}/events/"
+  end
+
+  def registration_url
+    "#{endpoint}/api/agents"
   end
 end

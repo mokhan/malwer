@@ -30,12 +30,14 @@ ActiveRecord::Schema.define(version: 20150207194524) do
     t.datetime "updated_at",  null: false
   end
 
+  add_index "dispositions", ["fingerprint"], name: "index_dispositions_on_fingerprint", unique: true, using: :btree
+
   create_table "events", id: :uuid, default: "uuid_generate_v4()", force: :cascade do |t|
     t.string   "type"
     t.json     "data"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer  "agent_id"
+    t.uuid     "agent_id",   null: false
   end
 
   add_index "events", ["agent_id"], name: "index_events_on_agent_id", using: :btree
