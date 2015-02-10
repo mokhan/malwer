@@ -1,7 +1,7 @@
 class Publisher
-  def self.publish(routing_key, message = {})
+  def self.publish(message)
     exchange = channel.topic("malwer")
-    exchange.publish(message.to_json, routing_key: routing_key)
+    exchange.publish(message.to_json, routing_key: message.routing_key)
   end
 
   def self.channel

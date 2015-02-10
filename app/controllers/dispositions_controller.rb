@@ -18,14 +18,19 @@ class DispositionsController < ApplicationController
   end
 
   def create
-    fingerprint = disposition_params[:fingerprint]
-    Publisher.publish("commands.poke.#{fingerprint}", disposition_params)
+    publish(PokeMessage.new(
+      fingerprint: disposition_params[:fingerprint],
+      state: disposition_params[:state],
+    ))
 
     redirect_to dispositions_path, notice: 'Disposition was successfully created.'
   end
 
   def update
-    Publisher.publish("poke", disposition_params)
+    publish(PokeMessage.new(
+      fingerprint: disposition_params[:fingerprint],
+      state: disposition_params[:state],
+    ))
     redirect_to dispositions_path, notice: 'Disposition was successfully updated.'
   end
 

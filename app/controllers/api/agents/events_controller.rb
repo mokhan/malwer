@@ -3,9 +3,12 @@ module Api
     class EventsController < ApplicationController
       def create
         @agent = Agent.find(params[:agent_id])
-        message = event_params.merge({agent_id: @agent.id})
-        routing_key = "events.#{event_params[:type]}.#{@agent.id}"
-        Publisher.publish(routing_key, message)
+        publish(EventMessage.new(
+          agent_id: @agent.id,
+          event_type: event_params[:event_type],
+          data: event_params[:data]
+        ))
+
         render nothing: true
       end
 

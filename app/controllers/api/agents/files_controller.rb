@@ -9,12 +9,11 @@ module Api
         @agent = Agent.find(params[:agent_id])
         @fingerprint = params[:id]
         @file = Disposition.find_by(fingerprint: params[:id])
-        message = {
+        publish(EventMessage.new(
           agent_id: @agent.id,
-          type: :lookup,
+          event_type: :scanned,
           data: params[:data]
-        }
-        Publisher.publish("events.scanned.#{@agent.id}", message)
+        ))
       end
     end
   end
