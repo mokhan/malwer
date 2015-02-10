@@ -2,11 +2,18 @@ require 'socket'
 
 class FakeAgent
   include PacketFu
+  DEFAULT_ENDPOINT='http://localhost:3000'
   attr_reader :id, :endpoint
 
-  def initialize(id, endpoint)
-    @id = id
+  def initialize(endpoint = DEFAULT_ENDPOINT)
     @endpoint = endpoint
+  end
+
+  def register
+    url = "#{endpoint}/agents.json"
+    response = Typhoeus.post(url, body: { agent: { hostname: Socket.gethostname } })
+    json = JSON.parse(response.body)
+    @id = json["id"]
   end
 
   def watch(directory)
