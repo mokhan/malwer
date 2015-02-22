@@ -1,4 +1,4 @@
 class Event < ActiveRecord::Base
   belongs_to :agent
-  has_secure_password
+  validates_presence_of :agent
 end

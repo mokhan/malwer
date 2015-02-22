@@ -5,11 +5,16 @@ class EventIntake
   from_queue "worker.events"
 
   def work(event_json)
-    logger.info event_json
-    json = JSON.parse(event_json)
-    json['type'] = json['type'].capitalize
-    event = Event.create!(json)
-    logger.info("Create Event: #{event.id}")
+    logger.info(event_json)
+    Event.create!(to_hash(event_json))
     ack!
+  end
+
+  private
+
+  def to_hash(json)
+    JSON.parse(json).tap do |event|
+      event['type'].capitalize!
+    end
   end
 end

@@ -2,11 +2,17 @@ require 'socket'
 
 class FakeAgent
   include PacketFu
+  DEFAULT_ENDPOINT='http://localhost:3000'
   attr_reader :id, :endpoint
 
-  def initialize(id, endpoint)
-    @id = id
+  def initialize(endpoint = DEFAULT_ENDPOINT)
     @endpoint = endpoint
+  end
+
+  def register
+    response = Typhoeus.post(registration_url, body: { agent: { hostname: hostname } })
+    json = JSON.parse(response.body)
+    @id = json["id"]
   end
 
   def watch(directory)
@@ -38,6 +44,8 @@ class FakeAgent
     when "unknown"
       puts "file is unknown"
     end
+  rescue StandardError => error
+    log_error(error)
   end
 
   def sniff(interface)
@@ -72,15 +80,15 @@ class FakeAgent
           data: {
             fingerprint: fingerprint_for(file),
             path: file,
-            hostname: Socket.gethostname,
+            hostname: hostname,
             ip_addresses: ip_addresses,
           }
         }
       }
       Typhoeus.post(event_url, body: body)
     end
-  rescue => e
-    puts "#{e.message} #{e.backtrace.join(' ')}"
+  rescue StandardError => error
+    log_error(error)
   end
 
   def fingerprint_for(file)
@@ -90,8 +98,12 @@ class FakeAgent
     sha
   end
 
+  def hostname
+    @hostname ||= Socket.gethostname
+  end
+
   def ip_addresses
-    Socket.ip_address_list.find_all { |x| x.ipv4? }.map { |x| x.ip_address }
+    @ipaddresses ||= Socket.ip_address_list.find_all { |x| x.ipv4? }.map { |x| x.ip_address }
   end
 
   def disposition_for(file)
@@ -106,10 +118,18 @@ class FakeAgent
   end
 
   def file_query_url(fingerprint)
-    "#{endpoint}/agents/#{id}/files/#{fingerprint}"
+    "#{endpoint}/api/agents/#{id}/files/#{fingerprint}"
   end
 
   def event_url
-    "#{endpoint}/agents/#{id}/events/"
+    "#{endpoint}/api/agents/#{id}/events/"
+  end
+
+  def registration_url
+    "#{endpoint}/api/agents"
+  end
+
+  def log_error(error)
+    puts "#{error.message} #{error.backtrace.join(' ')}"
   end
 end
