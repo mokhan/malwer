@@ -50,4 +50,5 @@ group :development, :test do
   gem 'listen'
   gem 'pcaprub'
   gem 'packetfu'
+  gem 'lol_dba'
 end
