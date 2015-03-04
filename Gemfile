@@ -49,6 +49,7 @@ group :development, :test do
   gem 'lol_dba'
   gem 'rspec-rails'
   gem 'factory_girl_rails'
+  gem 'database_cleaner'
 
   # fake agent
   gem 'listen'
