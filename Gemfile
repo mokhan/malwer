@@ -46,9 +46,12 @@ group :development, :test do
   gem 'spring'
   gem 'pry-rails'
   gem 'dotenv-rails'
+  gem 'lol_dba'
+  gem 'rspec-rails'
+  gem 'factory_girl_rails'
+
   # fake agent
   gem 'listen'
   gem 'pcaprub'
   gem 'packetfu'
-  gem 'lol_dba'
 end
