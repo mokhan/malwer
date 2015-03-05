@@ -99,7 +99,7 @@ class FakeAgent
   end
 
   def hostname
-    @hostname ||= Socket.gethostname
+    @hostname ||= "#{Socket.gethostname}-#{Faker::Internet.slug}"
   end
 
   def ip_addresses
