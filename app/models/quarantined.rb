@@ -1,0 +1,2 @@
+class Quarantined < Event
+end

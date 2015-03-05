@@ -1,2 +1,0 @@
-class Detection < Event
-end
