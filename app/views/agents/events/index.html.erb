@@ -24,7 +24,7 @@
                 <% if key == "fingerprint" %>
                   <li><%= key %>: <%= link_to value, disposition_path(id: value) %></li>
                 <% else %>
-                <li><%= key %>: <%= truncate(value) %></li>
+                <li><%= key %>: <%= value %></li>
                 <% end %>
               <% end %>
               </ul>
