@@ -7,6 +7,8 @@
 # you're doing.
 Vagrant.configure(2) do |config|
   config.vm.box = ENV["VAGRANT_BOX"] || "chef/centos-7.0"
+  config.vm.network :forwarded_port, guest: 3000, host: 3000
+  config.vm.network :forwarded_port, guest: 15672, host: 15672
   config.vm.provision :chef_apply do |chef|
     chef.recipe = File.read("config/chef_apply.rb")
   end
