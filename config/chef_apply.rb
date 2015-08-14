@@ -42,6 +42,11 @@ packages = %w{
   dsc21
   git
   java-1.8.0-openjdk
+  openssl-devel
+  postgresql-contrib
+  postgresql-server
+  readline-devel
+  zlib-devel
 }
 
 package packages do
@@ -90,10 +95,29 @@ bash "install_bundler" do
   EOH
 end
 
+bash "create_postgres_user" do
+  user "postgres"
+  code <<-SCRIPT
+    psql postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='vagrant'" | grep -q 1 || createuser -s -e -w vagrant
+  SCRIPT
+end
+
+bash "create_vagrant_db" do
+  user "vagrant"
+  not_if { "psql postgres -tAc \"SELECT 1 FROM pg_roles WHERE rolname='vagrant'\" | grep -q 1" }
+  code <<-SCRIPT
+    createdb
+  SCRIPT
+end
+
 service "rabbitmq-server" do
   action [:start, :enable]
 end
 
 service "cassandra" do
+  action [:start, :enable]
+end
+
+service "postgresql" do
   action [:start, :enable]
 end
