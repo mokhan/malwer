@@ -97,7 +97,7 @@ end
 
 bash "configure_postgres" do
   user "root"
-  not_if { ::Dir.exist?("/var/lib/pgsql/data") }
+  not_if { ::File.exist?("/var/lib/pgsql/data/base") }
   code <<-SCRIPT
     postgresql-setup initdb
   SCRIPT
