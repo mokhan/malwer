@@ -95,18 +95,11 @@ bash "install_bundler" do
   EOH
 end
 
-bash "create_postgres_user" do
-  user "postgres"
+bash "configure_postgres" do
+  user "root"
+  not_if { ::Dir.exist?("/var/lib/pgsql/data") }
   code <<-SCRIPT
-    psql postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='vagrant'" | grep -q 1 || createuser -s -e -w vagrant
-  SCRIPT
-end
-
-bash "create_vagrant_db" do
-  user "vagrant"
-  not_if { "psql postgres -tAc \"SELECT 1 FROM pg_roles WHERE rolname='vagrant'\" | grep -q 1" }
-  code <<-SCRIPT
-    createdb
+    postgresql-setup initdb
   SCRIPT
 end
 
@@ -120,4 +113,19 @@ end
 
 service "postgresql" do
   action [:start, :enable]
+end
+
+bash "create_postgres_user" do
+  user "postgres"
+  code <<-SCRIPT
+    psql postgres -tAc "SELECT 1 FROM pg_roles WHERE rolname='vagrant'" | grep -q 1 || createuser -s -e -w vagrant
+  SCRIPT
+end
+
+bash "create_vagrant_db" do
+  user "vagrant"
+  not_if { "psql postgres -tAc \"SELECT 1 FROM pg_roles WHERE rolname='vagrant'\" | grep -q 1" }
+  code <<-SCRIPT
+    createdb
+  SCRIPT
 end
