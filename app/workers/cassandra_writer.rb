@@ -1,6 +1,6 @@
 class CassandraWriter
   include Sneakers::Worker
-  from_queue "worker.events"
+  from_queue "worker.cassandra"
 
   def work(event_json)
     ack!

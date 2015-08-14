@@ -9,10 +9,9 @@ class CloudQueries
     attributes = JSON.parse(json)
 
     fingerprint = attributes["data"]["fingerprint"]
-    disposition = Disposition.find_by(fingerprint: fingerprint)
-
-    disposition = Disposition.create!(fingerprint: fingerprint, state: :unknown) if disposition.nil?
-    FingerprintLookupJob.perform_later(fingerprint) if disposition.state == :unknown
+    disposition = Disposition.find_by(fingerprint: fingerprint) ||
+      Disposition.create!(fingerprint: fingerprint, state: :unknown)
+    FingerprintLookupJob.perform_later(fingerprint) if disposition.unknown?
 
     ack!
   end

@@ -25,6 +25,10 @@ namespace :rabbitmq do
       # cloud queries bindings
       queue = channel.queue("worker.queries", durable: true)
       queue.bind(exchange, routing_key: 'events.scanned.#')
+
+      # cassandra worker bindings
+      queue = channel.queue("worker.cassandra", durable: true)
+      queue.bind(exchange, routing_key: 'events.scanned.#')
     end
 
     connection.close
