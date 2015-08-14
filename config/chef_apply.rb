@@ -42,8 +42,10 @@ packages = %w{
   dsc21
   git
   java-1.8.0-openjdk
+  libpcap-devel
   openssl-devel
   postgresql-contrib
+  postgresql-devel
   postgresql-server
   readline-devel
   zlib-devel
