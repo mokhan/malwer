@@ -73,13 +73,13 @@ git "/usr/local/rbenv/plugins/ruby-build" do
   action :sync
 end
 
-bash "install_jruby" do
+bash "install_ruby" do
   user "root"
   not_if { ::File.exist?("/usr/local/rbenv/shims/ruby") }
   code <<-EOH
     source /etc/profile.d/rbenv.sh
-    rbenv install jruby-1.7.11
-    rbenv global jruby-1.7.11
+    rbenv install 2.2.2
+    rbenv global 2.2.2
   EOH
 end
 
