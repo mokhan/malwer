@@ -93,7 +93,7 @@ class FakeAgent
 
   def fingerprint_for(file)
     return nil unless File.exist?(file)
-    result = `shasum -a 256 #{file}`
+    result = `sha256sum #{file}`
     sha, * = result.split(' ')
     sha
   end
