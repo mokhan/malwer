@@ -4,6 +4,8 @@ class FingerprintLookupJob < ActiveJob::Base
   queue_as :default
 
   def perform(fingerprint)
+    return unless ENV["VIRUS_TOTAL_API_KEY"].present?
+
     response = Typhoeus.post(ENDPOINT, params: {
       resource: fingerprint,
       apiKey: ENV.fetch("VIRUS_TOTAL_API_KEY"),
