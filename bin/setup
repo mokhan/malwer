@@ -37,4 +37,5 @@ Dir.chdir APP_ROOT do
 
   puts "\n== Preparing cassandra =="
   system "bin/rake cequel:keyspace:create"
+  system "bin/rake cequel:migrate"
 end
