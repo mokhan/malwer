@@ -14,7 +14,7 @@ Vagrant.configure(2) do |config|
   end
   config.ssh.forward_agent = true
   config.vm.provider "vmware_fusion" do |v|
-    v.vmx["memsize"] = "2048"
+    v.vmx["memsize"] = "4096"
     v.vmx["numvcpus"] = "2"
   end
 end

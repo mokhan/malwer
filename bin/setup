@@ -34,4 +34,7 @@ Dir.chdir APP_ROOT do
   puts "\n== Restarting application server =="
   system "mkdir -p tmp"
   system "touch tmp/restart.txt"
+
+  puts "\n== Preparing cassandra =="
+  system "bin/rake cequel:keyspace:create"
 end
