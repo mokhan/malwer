@@ -48,6 +48,7 @@ packages = %w{
   postgresql-devel
   postgresql-server
   readline-devel
+  redis
   zlib-devel
 }
 
@@ -114,6 +115,10 @@ service "cassandra" do
 end
 
 service "postgresql" do
+  action [:start, :enable]
+end
+
+service "redis" do
   action [:start, :enable]
 end
 

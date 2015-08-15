@@ -60,6 +60,7 @@ GEM
       execjs
     coffee-script-source (1.9.1)
     columnize (0.9.0)
+    connection_pool (2.2.0)
     database_cleaner (1.4.0)
     debug_inspector (0.0.2)
     debugger-linecache (1.2.0)
@@ -166,6 +167,9 @@ GEM
     rb-inotify (0.9.5)
       ffi (>= 0.5.0)
     rdoc (4.2.0)
+    redis (3.2.1)
+    redis-namespace (1.5.2)
+      redis (~> 3.0, >= 3.0.4)
     ref (2.0.0)
     rspec-core (3.2.1)
       rspec-support (~> 3.2.0)
@@ -196,6 +200,12 @@ GEM
       rdoc (~> 4.0)
     serverengine (1.5.10)
       sigdump (~> 0.2.2)
+    sidekiq (3.4.2)
+      celluloid (~> 0.16.0)
+      connection_pool (~> 2.2, >= 2.2.0)
+      json (~> 1.0)
+      redis (~> 3.2, >= 3.2.1)
+      redis-namespace (~> 1.5, >= 1.5.2)
     sigdump (0.2.2)
     slop (3.6.0)
     sneakers (1.0.2)
@@ -267,6 +277,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 5.0)
   sdoc (~> 0.4.0)
+  sidekiq
   sneakers
   spring
   therubyracer
@@ -276,4 +287,4 @@ DEPENDENCIES
   web-console (~> 2.0)
 
 BUNDLED WITH
-   1.10.5
+   1.10.6
