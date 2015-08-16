@@ -4,6 +4,7 @@ module Agents
 
     def index
       @events = @agent.events.order(created_at: :desc)
+      @queries = Query.where(agent_id: @agent.id).to_a
     end
 
     def new

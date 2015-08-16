@@ -6,6 +6,7 @@
     <%= link_to 'New Event', new_agent_event_path(@agent), class: 'button' %>
     <%= link_to "refresh", params, id: 'refresh_page_link', style: 'display:none;' %>
 
+    <h2>Events</h2>
     <table>
       <thead>
         <tr>
@@ -30,6 +31,26 @@
               </ul>
             </td>
             <td><%= event.created_at %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+
+    <h2>Queries</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Data</th>
+          <th width="210">Created At</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @queries.each do |query| %>
+          <tr>
+            <td><%= query.fingerprint %></td>
+            <td><%= query.path %></td>
+            <td><%= query.created_at %></td>
           </tr>
         <% end %>
       </tbody>

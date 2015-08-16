@@ -1,7 +1,9 @@
 class Query
   include Cequel::Record
 
-  key :agent_id, :uuid
-  column :path, :text
+  key :id, :timeuuid, auto: true
   column :fingerprint, :text
+  column :path, :text
+  column :agent_id, :uuid, index: true
+  timestamps
 end
