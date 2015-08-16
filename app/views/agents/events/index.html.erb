@@ -40,16 +40,14 @@
     <table>
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Data</th>
-          <th width="210">Created At</th>
+          <th>path</th>
+          <th>Created At</th>
         </tr>
       </thead>
       <tbody>
         <% @queries.each do |query| %>
           <tr>
-            <td><%= query.fingerprint %></td>
-            <td><%= query.path %></td>
+            <td><%= link_to query.path, disposition_path(id: query.fingerprint) %></td>
             <td><%= query.created_at %></td>
           </tr>
         <% end %>
