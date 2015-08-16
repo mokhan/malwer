@@ -3,8 +3,7 @@ module Agents
     before_action :load_agent
 
     def index
-      @events = @agent.events.where.not(type: 'Scanned').order(created_at: :desc)
-      @documents = Document.where(agent_id: @agent.id).to_a
+      @events = @agent.events.order(created_at: :desc)
     end
 
     def new

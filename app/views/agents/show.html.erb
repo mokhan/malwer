@@ -2,13 +2,23 @@
   <div class="small-12 columns">
     <p id="notice"><%= notice %></p>
 
-    <p>
-    <strong>Hostname:</strong>
-    <%= @agent.hostname %>
-    </p>
+    <h1><%= @agent.hostname %></h1>
 
-    <%= link_to 'Edit', edit_agent_path(@agent) %> |
-    <%= link_to 'Events', agent_events_path(@agent) %> |
-    <%= link_to 'Back', agents_path %>
+    <dl class="sub-nav">
+      <dd><%= link_to 'Edit', edit_agent_path(@agent) %></dd>
+      <dd><%= link_to 'Events', agent_events_path(@agent) %></dd>
+      <dd><%= link_to 'Files', agent_files_path(@agent) %></dd>
+    </dl>
+
+    <div class="small-12 columns">
+      <h2>Events per minute</h2>
+      <%= line_chart @agent.events.group_by_minute(:created_at).count %>
+    </div>
+
+    <div class="small-12 columns">
+      <h2>Events by category</h2>
+      <%= pie_chart @agent.events.group(:type).count %>
+    </div>
+
   </div>
 </div>
