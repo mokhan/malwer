@@ -36,19 +36,19 @@
       </tbody>
     </table>
 
-    <h2>Queries</h2>
+    <h2>Files</h2>
     <table>
       <thead>
         <tr>
-          <th>path</th>
+          <th>Filename</th>
           <th>Created At</th>
         </tr>
       </thead>
       <tbody>
-        <% @queries.each do |query| %>
+        <% @documents.each do |document| %>
           <tr>
-            <td><%= link_to query.path, disposition_path(id: query.fingerprint) %></td>
-            <td><%= query.created_at %></td>
+            <td><%= link_to document.filename, disposition_path(id: document.fingerprint) %></td>
+            <td><%= document.created_at %></td>
           </tr>
         <% end %>
       </tbody>

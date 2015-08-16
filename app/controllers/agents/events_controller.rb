@@ -4,7 +4,7 @@ module Agents
 
     def index
       @events = @agent.events.where.not(type: 'Scanned').order(created_at: :desc)
-      @queries = Query.where(agent_id: @agent.id).to_a
+      @documents = Document.where(agent_id: @agent.id).to_a
     end
 
     def new

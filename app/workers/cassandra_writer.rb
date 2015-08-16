@@ -5,9 +5,10 @@ class CassandraWriter
   def work(event_json)
     attributes = JSON.parse(event_json)
 
-    Query.create!(
+    Document.create!(
       agent_id: attributes['agent_id'],
       path: attributes['data']['path'],
+      filename: File.basename(attributes['data']['path']),
       fingerprint: attributes["data"]["fingerprint"],
     )
     ack!
