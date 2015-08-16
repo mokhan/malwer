@@ -9,10 +9,14 @@ class FakeAgent
     @endpoint = endpoint
   end
 
-  def register
-    response = Typhoeus.post(registration_url, body: { agent: { hostname: hostname } })
-    json = JSON.parse(response.body)
-    @id = json["id"]
+  def register(id = ENV['AGENT_ID'])
+    if id.present?
+      @id = id
+    else
+      response = Typhoeus.post(registration_url, body: { agent: { hostname: hostname } })
+      json = JSON.parse(response.body)
+      @id = json["id"]
+    end
   end
 
   def watch(directory)
