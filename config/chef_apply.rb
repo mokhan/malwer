@@ -29,6 +29,7 @@ packages = %w{
   perl
   python
   python-software-properties
+  rabbitmq-server
   software-properties-common
   sqlite3
   unzip
