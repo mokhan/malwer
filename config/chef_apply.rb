@@ -16,6 +16,7 @@ packages = %w{
   libfreetype6
   libicu-dev
   libjpeg-dev
+  libpcap-dev
   libpng-dev
   libreadline-dev
   libsqlite3-dev
